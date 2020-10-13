@@ -1,0 +1,151 @@
+I"A<h1 id="getting-started">Getting started</h1>
+
+<p><a href="https://pages.github.com">GitHub Pages</a> can automatically generate and serve the website for you.
+Let’s say you have a username/organisation <code class="language-plaintext highlighter-rouge">my-org</code> and project <code class="language-plaintext highlighter-rouge">my-proj</code>; if you locate Jekyll source under <code class="language-plaintext highlighter-rouge">blog</code> folder of master branch in your repo <code class="language-plaintext highlighter-rouge">github.com/my-org/my-proj</code>, the website will be served on <code class="language-plaintext highlighter-rouge">my-org.github.io/my-proj</code>.</p>
+
+<ol>
+  <li>Just download or fork and clone the source from <a href="https://github.com/janczizikow/sleek/">github.com/janczizikow/sleek</a>.</li>
+  <li>Make sure your local machine has ruby and node</li>
+  <li>Edit site settings in  <code class="language-plaintext highlighter-rouge">_config.yml</code> file according to your project.</li>
+  <li>Replace <code class="language-plaintext highlighter-rouge">favicons</code> and <code class="language-plaintext highlighter-rouge">_includes/logo.svg</code> with your own logo.</li>
+</ol>
+
+<p><strong>Note</strong> that you might have to adjust some CSS depending on the width and height of your logo. You can find Header / Navigation related SCSS in <code class="language-plaintext highlighter-rouge">_sass/layout/nav.scss</code>.</p>
+
+<h2 id="writing-content">Writing content</h2>
+
+<h3 id="posts">Posts</h3>
+
+<p>Create a new Markdown file such as <code class="language-plaintext highlighter-rouge">2017-01-13-my-post.md</code> in <code class="language-plaintext highlighter-rouge">_post</code> folder. Configure YAML Front Matter (stuff between <code class="language-plaintext highlighter-rouge">---</code>):</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">post</span> <span class="c1"># needs to be post</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s">Getting Started with Sleek</span> <span class="c1"># title of your post</span>
+<span class="na">featured-img</span><span class="pi">:</span> <span class="s">sleek</span> <span class="c1">#optional - if you want you can include hero image</span>
+<span class="nn">---</span>
+
+</code></pre></div></div>
+
+<h4 id="images">Images</h4>
+
+<p>In case you want to add a hero image to the post, apart from changing <code class="language-plaintext highlighter-rouge">featured-img</code> in YAML, you also need to add the image file to the project. To do so, just upload an image in <code class="language-plaintext highlighter-rouge">.jpg</code> format to <code class="language-plaintext highlighter-rouge">_img</code> folder. The name must before the <code class="language-plaintext highlighter-rouge">.jpg</code> file extension has to match with <code class="language-plaintext highlighter-rouge">featured-img</code> in YAML. Next, run <code class="language-plaintext highlighter-rouge">gulp img</code> from command line to generate optimized version of the image and all the thumbnails. You have to restart  the jekyll server to see the changes. Sleek uses <a href="https://github.com/aFarkas/lazysizes">Lazy Sizes</a> Lazy Loader for loading images. Check the link for more info. Lazy Sizes doesnt’t require any configuration and it’s going to be included in your bundled js file.</p>
+
+<h3 id="pages">Pages</h3>
+
+<p>The home page is located under <code class="language-plaintext highlighter-rouge">index.md</code> file. To change the content or design you have to edit the <code class="language-plaintext highlighter-rouge">default.html</code> file in <code class="language-plaintext highlighter-rouge">_layouts</code> folder.</p>
+
+<p>In order to add a new page, create a new html or markdown file under root directory or inside <code class="language-plaintext highlighter-rouge">_pages</code> folder. To add a link to the page, edit <code class="language-plaintext highlighter-rouge">navigation</code> setting in <code class="language-plaintext highlighter-rouge">_config.yml</code>.</p>
+
+<h3 id="images-todo">Images TODO</h3>
+
+<p>Introduce gulp optimization</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Breakpoint</th>
+      <th>Image Type</th>
+      <th>Width</th>
+      <th>Retina</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>xs</td>
+      <td>Post Thumb</td>
+      <td>535px</td>
+      <td>1070px</td>
+    </tr>
+    <tr>
+      <td>sm</td>
+      <td>Post Thumb</td>
+      <td>500px</td>
+      <td>1000px</td>
+    </tr>
+    <tr>
+      <td>md</td>
+      <td>Post Thumb</td>
+      <td>329.375px</td>
+      <td>658.75px</td>
+    </tr>
+    <tr>
+      <td>lg</td>
+      <td>Post Thumb</td>
+      <td>445.625px</td>
+      <td>891.25px</td>
+    </tr>
+    <tr>
+      <td>xl</td>
+      <td>Post Thumb</td>
+      <td>353.125px</td>
+      <td>706.25px</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Breakpoint</th>
+      <th>Image Type</th>
+      <th>Width</th>
+      <th>Retina</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>xs</td>
+      <td>Post Hero</td>
+      <td>535px</td>
+      <td>1070px</td>
+    </tr>
+    <tr>
+      <td>sm</td>
+      <td>Post Hero</td>
+      <td>500px</td>
+      <td>1000px</td>
+    </tr>
+    <tr>
+      <td>md</td>
+      <td>Post Hero</td>
+      <td>329.375px</td>
+      <td>658.75px</td>
+    </tr>
+    <tr>
+      <td>lg</td>
+      <td>Post Hero</td>
+      <td>445.625px</td>
+      <td>891.25px</td>
+    </tr>
+    <tr>
+      <td>xl</td>
+      <td>Post Hero</td>
+      <td>353.125px</td>
+      <td>706.25px</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="mathjax">MathJax</h3>
+
+<p>If you want to use <a href="https://www.mathjax.org/">MathJax</a> in your posts, add <code class="language-plaintext highlighter-rouge">mathjax: true</code> in <a href="https://jekyllrb.com/docs/frontmatter/">YAML front matter</a> of your post:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">post</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s">Blog Post with MathJax</span>
+<span class="na">featured-img</span><span class="pi">:</span> <span class="s">sleek</span> <span class="c1"># optional - if you want you can include name of hero image</span>
+<span class="na">mathjax</span><span class="pi">:</span> <span class="no">true</span> <span class="c1"># add this line in order to enable MathJax in the post</span>
+<span class="nn">---</span>
+</code></pre></div></div>
+
+<h4 id="example">Example</h4>
+
+<p>In N-dimensional simplex noise, the squared kernel summation radius $r^2$ is $\frac 1 2$
+for all values of N. This is because the edge length of the N-simplex $s = \sqrt {\frac {N} {N + 1}}$
+divides out of the N-simplex height $h = s \sqrt {\frac {N + 1} {2N}}$.
+The kerel summation radius $r$ is equal to the N-simplex height $h$.</p>
+
+<p>\(r = h = \sqrt{\frac {1} {2}} = \sqrt{\frac {N} {N+1}} \sqrt{\frac {N+1} {2N}}\)
+Happy hacking!</p>
+:ET
