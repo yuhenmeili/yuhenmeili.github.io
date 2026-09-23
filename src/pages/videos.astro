@@ -51,6 +51,11 @@ const base = import.meta.env.BASE_URL;
         </svg>
       </button>
       <video id="modal-player" controls playsinline preload="metadata"></video>
+      <div class="loading-overlay" id="modal-loading" hidden>
+        <div class="spinner"></div>
+        <div class="loading-bar"><span id="loading-fill"></span></div>
+        <p class="loading-text" id="loading-text">加载中…</p>
+      </div>
       <p class="modal-title" id="modal-title"></p>
     </div>
   </dialog>
@@ -145,6 +150,8 @@ const base = import.meta.env.BASE_URL;
 
   /* Modal player */
   .video-modal {
+    /* the global `* { margin: 0 }` would otherwise pin the dialog top-left */
+    margin: auto;
     width: min(960px, 92vw);
     padding: 0;
     border: 1px solid var(--color-border);
@@ -168,6 +175,66 @@ const base = import.meta.env.BASE_URL;
     max-height: 72vh;
     border-radius: 0.5rem;
     background: black;
+  }
+
+  /* Loading overlay for large files */
+  .loading-overlay {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    top: 1rem;
+    height: min(72vh, calc(100vw - 4rem));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border-radius: 0.5rem;
+    background: rgba(2, 6, 23, 0.72);
+    backdrop-filter: blur(3px);
+    z-index: 1;
+  }
+
+  .loading-overlay[hidden] {
+    display: none;
+  }
+
+  .spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid rgba(148, 163, 184, 0.3);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading-bar {
+    width: min(360px, 70%);
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(148, 163, 184, 0.25);
+    overflow: hidden;
+  }
+
+  .loading-bar span {
+    display: block;
+    width: 0%;
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent-purple));
+    transition: width 0.25s ease;
+  }
+
+  .loading-text {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
   }
 
   .modal-title {
@@ -266,8 +333,40 @@ const base = import.meta.env.BASE_URL;
     });
 
     // Modal playback
+    const loading = document.getElementById('modal-loading');
+    const loadingFill = document.getElementById('loading-fill');
+    const loadingText = document.getElementById('loading-text');
     if (modal && player && !modal.dataset.bound) {
       modal.dataset.bound = '1';
+
+      const showLoading = (text) => {
+        if (!loading) return;
+        loading.hidden = false;
+        if (loadingFill) loadingFill.style.width = '0%';
+        if (loadingText) loadingText.textContent = text ?? '加载中…';
+      };
+
+      const updateBufferProgress = () => {
+        if (!loading || loading.hidden) return;
+        const dur = player.duration;
+        if (dur > 0 && player.buffered.length > 0) {
+          const pct = Math.min(
+            100,
+            Math.round((player.buffered.end(player.buffered.length - 1) / dur) * 100),
+          );
+          if (loadingFill) loadingFill.style.width = `${pct}%`;
+          if (loadingText) loadingText.textContent = `加载中 ${pct}%`;
+        }
+      };
+
+      player.addEventListener('progress', updateBufferProgress);
+      player.addEventListener('canplay', () => {
+        if (loading) loading.hidden = true;
+      });
+      player.addEventListener('playing', () => {
+        if (loading) loading.hidden = true;
+      });
+      player.addEventListener('waiting', () => showLoading('缓冲中…'));
 
       const openModal = (card: HTMLElement) => {
         const title = card.querySelector('.title')?.textContent ?? '';
@@ -275,6 +374,7 @@ const base = import.meta.env.BASE_URL;
         if (player.src !== card.dataset.videoSrc) {
           player.src = card.dataset.videoSrc ?? '';
         }
+        showLoading('加载中…');
         modal.showModal();
         player.play().catch(() => {});
       };
