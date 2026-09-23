@@ -1,0 +1,185 @@
+---
+// Video card: poster thumbnail with hover preview, quality badge and tag row.
+import type { VideoEntry } from '../data/videos';
+
+interface Props {
+  video: VideoEntry;
+  categoryLabel: string;
+}
+
+const { video, categoryLabel } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<figure
+  class="video-card"
+  data-category={video.category}
+  data-video-src={`${base}${video.file}`}
+  tabindex="0"
+  role="button"
+  aria-label={`播放 ${video.title}`}
+>
+  <div class="thumb">
+    <img src={`${base}${video.poster}`} alt={video.title} loading="lazy" />
+    <video class="preview" muted loop playsinline preload="none" data-src={`${base}${video.file}`}></video>
+    <span class="play-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <polygon points="6 3 21 12 6 21 6 3"></polygon>
+      </svg>
+    </span>
+    <span class="duration">{video.duration}</span>
+  </div>
+  <figcaption>
+    <div class="title-row">
+      <svg class="cam" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m22 8-6 4 6 4V8Z"></path>
+        <rect x="2" y="6" width="14" height="12" rx="2" ry="2"></rect>
+      </svg>
+      <h3 class="title">{video.title}</h3>
+      <span class="quality">{video.quality}</span>
+    </div>
+    <p class="meta">
+      <span class="category-chip">{categoryLabel}</span>
+      {video.tags.map((tag) => <span>{tag}</span>)}
+    </p>
+  </figcaption>
+</figure>
+
+<style>
+  .video-card {
+    background: rgba(30, 41, 59, 0.55);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .video-card:hover,
+  .video-card:focus-visible {
+    border-color: var(--color-primary);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.18);
+    outline: none;
+  }
+
+  .thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-bg-darker);
+  }
+
+  .thumb img,
+  .thumb video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumb video {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .video-card:hover .thumb video,
+  .video-card:focus-visible .thumb video {
+    opacity: 1;
+  }
+
+  .play-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 4px;
+    border-radius: 50%;
+    background: rgba(2, 6, 23, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    color: var(--color-text);
+    backdrop-filter: blur(4px);
+    opacity: 0.95;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .video-card:hover .play-icon {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+
+  .duration {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.375rem;
+    background: rgba(2, 6, 23, 0.75);
+    color: var(--color-text);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  figcaption {
+    padding: 0.875rem 1rem 1rem;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .cam {
+    flex-shrink: 0;
+    color: var(--color-text-dim);
+  }
+
+  .title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .quality {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding: 0.0625rem 0.4375rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.3125rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--color-text-dim);
+    letter-spacing: 0.03em;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-dim);
+  }
+
+  .category-chip {
+    color: var(--color-primary);
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 0.3125rem;
+    padding: 0.0625rem 0.4375rem;
+    font-size: 0.75rem;
+  }
+</style>
