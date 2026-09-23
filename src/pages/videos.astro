@@ -60,11 +60,13 @@ const base = import.meta.env.BASE_URL;
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-      <video id="modal-player" controls playsinline preload="metadata"></video>
-      <div class="loading-overlay" id="modal-loading" hidden>
-        <div class="spinner"></div>
-        <div class="loading-bar"><span id="loading-fill"></span></div>
-        <p class="loading-text" id="loading-text">加载中…</p>
+      <div class="modal-stage is-loading" id="modal-stage">
+        <video id="modal-player" controls playsinline preload="metadata"></video>
+        <div class="loading-overlay" id="modal-loading" hidden>
+          <div class="spinner"></div>
+          <div class="loading-bar"><span id="loading-fill"></span></div>
+          <p class="loading-text" id="loading-text">加载中…</p>
+        </div>
       </div>
       <p class="modal-title" id="modal-title"></p>
     </div>
@@ -193,27 +195,37 @@ const base = import.meta.env.BASE_URL;
 
   .modal-inner video {
     width: 100%;
-    max-height: 72vh;
-    border-radius: 0.5rem;
+    height: 100%;
+    object-fit: contain;
+    display: block;
     background: black;
+  }
+
+  /* Fixed-height stage so the dialog keeps its size while metadata loads;
+     the player stays hidden (is-loading) until playback is ready. */
+  .modal-stage {
+    position: relative;
+    height: min(72vh, 36rem);
+    background: black;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .modal-stage.is-loading video {
+    visibility: hidden;
   }
 
   /* Loading overlay for large files */
   .loading-overlay {
     position: absolute;
-    left: 1rem;
-    right: 1rem;
-    top: 1rem;
-    height: min(72vh, calc(100vw - 4rem));
+    inset: 0;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    border-radius: 0.5rem;
     background: rgba(2, 6, 23, 0.72);
-    backdrop-filter: blur(3px);
-    z-index: 1;
   }
 
   .loading-overlay[hidden] {
@@ -369,6 +381,7 @@ const base = import.meta.env.BASE_URL;
     const loading = document.getElementById('modal-loading');
     const loadingFill = document.getElementById('loading-fill');
     const loadingText = document.getElementById('loading-text');
+    const stage = document.getElementById('modal-stage');
     if (modal && player && !modal.dataset.bound) {
       modal.dataset.bound = '1';
 
@@ -395,16 +408,19 @@ const base = import.meta.env.BASE_URL;
       player.addEventListener('progress', updateBufferProgress);
       player.addEventListener('canplay', () => {
         if (loading) loading.hidden = true;
+        stage?.classList.remove('is-loading');
       });
       player.addEventListener('playing', () => {
         if (loading) loading.hidden = true;
+        stage?.classList.remove('is-loading');
       });
       player.addEventListener('waiting', () => showLoading('缓冲中…'));
 
       const openModal = (card: HTMLElement) => {
         const title = card.querySelector('.title')?.textContent ?? '';
         if (modalTitle) modalTitle.textContent = title;
-        if (player.src !== card.dataset.videoSrc) {
+        if (player.getAttribute('src') !== card.dataset.videoSrc) {
+          stage?.classList.add('is-loading');
           player.src = card.dataset.videoSrc ?? '';
         }
         showLoading('加载中…');
