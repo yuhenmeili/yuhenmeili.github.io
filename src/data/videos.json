@@ -70,34 +70,6 @@
     "height": 1004
   },
   {
-    "title": "顶点动画",
-    "category": "render",
-    "tags": [
-      "顶点着色器",
-      "动画"
-    ],
-    "file": "videos/顶点动画.mp4",
-    "poster": "posters/顶点动画.jpg",
-    "quality": "1080p",
-    "duration": "0:02",
-    "width": 1930,
-    "height": 1024
-  },
-  {
-    "title": "高性能模糊后处理",
-    "category": "render",
-    "tags": [
-      "后处理",
-      "模糊"
-    ],
-    "file": "videos/高性能模糊.mp4",
-    "poster": "posters/高性能模糊.jpg",
-    "quality": "1080p",
-    "duration": "0:17",
-    "width": 1794,
-    "height": 1006
-  },
-  {
     "title": "PBR 与 TAA",
     "category": "render",
     "tags": [
@@ -138,6 +110,20 @@
     "duration": "0:22",
     "width": 2750,
     "height": 1564
+  },
+  {
+    "title": "顶点动画",
+    "category": "morrowui",
+    "tags": [
+      "MorrowUI",
+      "顶点着色器"
+    ],
+    "file": "videos/MorrowUI/顶点动画.mp4",
+    "poster": "posters/MorrowUI/顶点动画.jpg",
+    "quality": "1080p",
+    "duration": "0:02",
+    "width": 1930,
+    "height": 1024
   },
   {
     "title": "3D 空间测量",
@@ -516,5 +502,16 @@
     "duration": "0:14",
     "width": 1920,
     "height": 1080
+  },
+  {
+    "title": "高性能模糊",
+    "category": "morrowui",
+    "tags": [],
+    "file": "videos/MorrowUI/高性能模糊.mp4",
+    "poster": "posters/MorrowUI/高性能模糊.jpg",
+    "quality": "1080p",
+    "duration": "0:17",
+    "width": 1794,
+    "height": 1006
   }
 ]

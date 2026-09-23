@@ -37,11 +37,11 @@ const OVERRIDES = {
   'skybox.mp4': { title: '天空盒 Skybox', category: 'render', tags: ['天空盒', '全景'] },
   '模型阴影.mp4': { title: '模型实时阴影', category: 'render', tags: ['实时阴影', 'Shadow Map'] },
   '视频投影.mp4': { title: '视频纹理投影', category: 'render', tags: ['视频纹理', '投影'] },
-  '顶点动画.mp4': { title: '顶点动画', category: 'render', tags: ['顶点着色器', '动画'] },
-  '高性能模糊.mp4': { title: '高性能模糊后处理', category: 'render', tags: ['后处理', '模糊'] },
+  '高性能模糊.mp4': { title: '高性能模糊', category: 'morrowui', tags: ['MorrowUI', '后处理'] },
   'PBR和TAA.mp4': { title: 'PBR 与 TAA', category: 'render', tags: ['PBR', 'TAA'] },
   'TAA_1.mp4': { title: 'TAA 时域抗锯齿 · 一', category: 'render', tags: ['TAA', '抗锯齿'] },
   'TAA_2.mp4': { title: 'TAA 时域抗锯齿 · 二', category: 'render', tags: ['TAA', '抗锯齿'] },
+  'MorrowUI/顶点动画.mp4': { title: '顶点动画', category: 'morrowui', tags: ['MorrowUI', '顶点着色器'] },
 
   // GIS 与数字孪生
   '3D空间测量.mp4': { title: '3D 空间测量', category: 'gis', tags: ['空间测量', '拾取'] },
