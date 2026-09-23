@@ -27,7 +27,12 @@ export const CATEGORIES: VideoCategory[] = [
   {
     id: 'engine',
     label: 'Morrow 引擎',
-    description: '自研 Morrow 渲染引擎与实时渲染技术实验（尚未开源）',
+    description: '自研 Morrow 渲染引擎的整体效果（尚未开源）',
+  },
+  {
+    id: 'render',
+    label: '渲染技术',
+    description: '天空盒、阴影、TAA、后处理等实时渲染技术演示',
   },
   {
     id: 'morrowui',

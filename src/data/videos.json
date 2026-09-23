@@ -6,8 +6,8 @@
       "Vulkan",
       "Morrow 引擎"
     ],
-    "file": "videos/Morrow引擎效果1.mp4",
-    "poster": "posters/Morrow引擎效果1.jpg",
+    "file": "videos/Morrow/Morrow引擎效果1.mp4",
+    "poster": "posters/Morrow/Morrow引擎效果1.jpg",
     "quality": "2K",
     "duration": "0:13",
     "width": 2208,
@@ -20,8 +20,8 @@
       "Vulkan",
       "Morrow 引擎"
     ],
-    "file": "videos/Morrow引擎效果2.mp4",
-    "poster": "posters/Morrow引擎效果2.jpg",
+    "file": "videos/Morrow/Morrow引擎效果2.mp4",
+    "poster": "posters/Morrow/Morrow引擎效果2.jpg",
     "quality": "2K",
     "duration": "0:56",
     "width": 2208,
@@ -29,7 +29,7 @@
   },
   {
     "title": "天空盒 Skybox",
-    "category": "engine",
+    "category": "render",
     "tags": [
       "天空盒",
       "全景"
@@ -43,7 +43,7 @@
   },
   {
     "title": "模型实时阴影",
-    "category": "engine",
+    "category": "render",
     "tags": [
       "实时阴影",
       "Shadow Map"
@@ -57,7 +57,7 @@
   },
   {
     "title": "视频纹理投影",
-    "category": "engine",
+    "category": "render",
     "tags": [
       "视频纹理",
       "投影"
@@ -71,7 +71,7 @@
   },
   {
     "title": "顶点动画",
-    "category": "engine",
+    "category": "render",
     "tags": [
       "顶点着色器",
       "动画"
@@ -85,7 +85,7 @@
   },
   {
     "title": "高性能模糊后处理",
-    "category": "engine",
+    "category": "render",
     "tags": [
       "后处理",
       "模糊"
@@ -99,7 +99,7 @@
   },
   {
     "title": "PBR 与 TAA",
-    "category": "engine",
+    "category": "render",
     "tags": [
       "PBR",
       "TAA"
@@ -113,7 +113,7 @@
   },
   {
     "title": "TAA 时域抗锯齿 · 一",
-    "category": "engine",
+    "category": "render",
     "tags": [
       "TAA",
       "抗锯齿"
@@ -127,7 +127,7 @@
   },
   {
     "title": "TAA 时域抗锯齿 · 二",
-    "category": "engine",
+    "category": "render",
     "tags": [
       "TAA",
       "抗锯齿"
