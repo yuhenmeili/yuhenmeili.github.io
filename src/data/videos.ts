@@ -3,7 +3,6 @@
 import rawEntries from './videos.json';
 
 export interface VideoEntry {
-  slug: string;
   title: string;
   category: string;
   tags: string[];
@@ -19,18 +18,28 @@ export interface VideoCategory {
   id: string;
   label: string;
   description: string;
+  /** Optional external repo / project link shown with the category. */
+  link?: string;
+  linkLabel?: string;
 }
 
 export const CATEGORIES: VideoCategory[] = [
   {
     id: 'engine',
-    label: '自研引擎',
-    description: '自研 Vulkan 渲染引擎与实时渲染技术实验',
+    label: 'Morrow 引擎',
+    description: '自研 Morrow 渲染引擎与实时渲染技术实验（尚未开源）',
+  },
+  {
+    id: 'morrowui',
+    label: 'MorrowUI',
+    description: '开源车载 HMI 组件库的效果展示',
+    link: 'https://github.com/yuhenmeili/MorrowUI',
+    linkLabel: 'GitHub 开源仓库',
   },
   {
     id: 'auto',
     label: '车载 HMI',
-    description: 'MorrowUI 车载界面动效与 Unity 智能座舱演示',
+    description: 'Unity 智能座舱演示',
   },
   {
     id: 'gis',
@@ -53,4 +62,8 @@ export const VIDEOS: VideoEntry[] = rawEntries as VideoEntry[];
 
 export function categoryLabel(id: string): string {
   return CATEGORIES.find((c) => c.id === id)?.label ?? id;
+}
+
+export function categoryById(id: string): VideoCategory | undefined {
+  return CATEGORIES.find((c) => c.id === id);
 }

@@ -1,18 +1,20 @@
-// Ingest source videos from workcase/ into public/videos with ASCII-safe
-// filenames, extract metadata via ffprobe, generate poster frames via ffmpeg,
-// and emit src/data/videos.json for the site to import.
+// Scan public/videos (the git-managed source of truth, mirroring workcase/)
+// and regenerate poster frames plus src/data/videos.json.
 //
 // Usage: node scripts/ingest-videos.mjs <ffmpegDir>
 //   <ffmpegDir> is the folder containing ffmpeg.exe / ffprobe.exe
+//
+// Adding a video: drop the file anywhere under public/videos/, then re-run
+// this script. Category is derived from the top-level folder, title from the
+// file name; add an entry to OVERRIDES below to fine-tune title/tags/category.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const SOURCE_DIR = path.join(ROOT, 'workcase');
-const VIDEOS_OUT = path.join(ROOT, 'public', 'videos');
-const POSTERS_OUT = path.join(ROOT, 'public', 'posters');
+const VIDEOS_DIR = path.join(ROOT, 'public', 'videos');
+const POSTERS_DIR = path.join(ROOT, 'public', 'posters');
 const DATA_OUT = path.join(ROOT, 'src', 'data', 'videos.json');
 
 const [ffmpegDir] = process.argv.slice(2);
@@ -23,52 +25,79 @@ if (!ffmpegDir) {
 const FFMPEG = path.join(ffmpegDir, 'ffmpeg.exe');
 const FFPROBE = path.join(ffmpegDir, 'ffprobe.exe');
 
-// Curated metadata keyed by path relative to workcase/ (forward slashes).
-// category ids map to src/data/videos.ts CATEGORIES.
-const MANIFEST = {
-  // 自研引擎
-  'skybox.mp4': { slug: 'skybox', title: '天空盒 Skybox', category: 'engine', tags: ['天空盒', '全景'] },
-  '模型阴影.mp4': { slug: 'model-shadow', title: '模型实时阴影', category: 'engine', tags: ['实时阴影', 'Shadow Map'] },
-  '视频投影.mp4': { slug: 'video-projection', title: '视频纹理投影', category: 'engine', tags: ['视频纹理', '投影'] },
-  '顶点动画.mp4': { slug: 'vertex-animation', title: '顶点动画', category: 'engine', tags: ['顶点着色器', '动画'] },
-  '高性能模糊.mp4': { slug: 'high-performance-blur', title: '高性能模糊后处理', category: 'engine', tags: ['后处理', '模糊'] },
-  'PBR和TAA.mp4': { slug: 'pbr-taa', title: 'PBR 与 TAA', category: 'engine', tags: ['PBR', 'TAA'] },
-  'TAA_1.mp4': { slug: 'taa-1', title: 'TAA 时域抗锯齿 · 一', category: 'engine', tags: ['TAA', '抗锯齿'] },
-  'TAA_2.mp4': { slug: 'taa-2', title: 'TAA 时域抗锯齿 · 二', category: 'engine', tags: ['TAA', '抗锯齿'] },
-  '自研vulkan引擎效果1.mp4': { slug: 'vulkan-engine-1', title: '自研 Vulkan 引擎 · 演示一', category: 'engine', tags: ['Vulkan', '自研引擎'] },
-  '自研vulkan引擎效果2.mp4': { slug: 'vulkan-engine-2', title: '自研 Vulkan 引擎 · 演示二', category: 'engine', tags: ['Vulkan', '自研引擎'] },
+// Curated metadata overrides, keyed by path relative to public/videos/
+// (forward slashes). Anything not listed here is auto-derived:
+//   category: top-level folder (see FOLDER_CATEGORIES) or 'uncategorized'
+//   title:    file name without extension
+//   tags:     []
+const OVERRIDES = {
+  // Morrow 引擎（自研，未开源）
+  'Morrow引擎效果1.mp4': { title: 'Morrow 引擎 · 效果一', category: 'engine', tags: ['Vulkan', 'Morrow 引擎'] },
+  'Morrow引擎效果2.mp4': { title: 'Morrow 引擎 · 效果二', category: 'engine', tags: ['Vulkan', 'Morrow 引擎'] },
+  'skybox.mp4': { title: '天空盒 Skybox', category: 'engine', tags: ['天空盒', '全景'] },
+  '模型阴影.mp4': { title: '模型实时阴影', category: 'engine', tags: ['实时阴影', 'Shadow Map'] },
+  '视频投影.mp4': { title: '视频纹理投影', category: 'engine', tags: ['视频纹理', '投影'] },
+  '顶点动画.mp4': { title: '顶点动画', category: 'engine', tags: ['顶点着色器', '动画'] },
+  '高性能模糊.mp4': { title: '高性能模糊后处理', category: 'engine', tags: ['后处理', '模糊'] },
+  'PBR和TAA.mp4': { title: 'PBR 与 TAA', category: 'engine', tags: ['PBR', 'TAA'] },
+  'TAA_1.mp4': { title: 'TAA 时域抗锯齿 · 一', category: 'engine', tags: ['TAA', '抗锯齿'] },
+  'TAA_2.mp4': { title: 'TAA 时域抗锯齿 · 二', category: 'engine', tags: ['TAA', '抗锯齿'] },
 
   // GIS 与数字孪生
-  '3D空间测量.mp4': { slug: 'spatial-measurement', title: '3D 空间测量', category: 'gis', tags: ['空间测量', '拾取'] },
-  'DWG投影贴地.mp4': { slug: 'dwg-projection', title: 'DWG 投影贴地', category: 'gis', tags: ['DWG', 'GIS'] },
-  '倾斜摄影压平.mp4': { slug: 'orthophoto-flatten', title: '倾斜摄影压平', category: 'gis', tags: ['倾斜摄影', '压平'] },
-  '剖切.mp4': { slug: 'section-clipping', title: '模型剖切', category: 'gis', tags: ['剖切', '裁剪'] },
-  '动态轨迹线.mp4': { slug: 'dynamic-trajectory', title: '动态轨迹线', category: 'gis', tags: ['轨迹线', '动效'] },
+  '3D空间测量.mp4': { title: '3D 空间测量', category: 'gis', tags: ['空间测量', '拾取'] },
+  'DWG投影贴地.mp4': { title: 'DWG 投影贴地', category: 'gis', tags: ['DWG', 'GIS'] },
+  '倾斜摄影压平.mp4': { title: '倾斜摄影压平', category: 'gis', tags: ['倾斜摄影', '压平'] },
+  '剖切.mp4': { title: '模型剖切', category: 'gis', tags: ['剖切', '裁剪'] },
+  '动态轨迹线.mp4': { title: '动态轨迹线', category: 'gis', tags: ['轨迹线', '动效'] },
 
   // BIM 与 CAD
-  'BIM水面效果.mp4': { slug: 'bim-water', title: 'BIM 水面效果', category: 'bimcad', tags: ['BIM', '水面渲染'] },
-  '模型组件高亮.mp4': { slug: 'component-highlight', title: '模型组件高亮', category: 'bimcad', tags: ['BIM', '高亮'] },
-  'CAD渲染.mp4': { slug: 'cad-rendering', title: 'CAD 实时渲染', category: 'bimcad', tags: ['CAD', '实时渲染'] },
+  'BIM水面效果.mp4': { title: 'BIM 水面效果', category: 'bimcad', tags: ['BIM', '水面渲染'] },
+  '模型组件高亮.mp4': { title: '模型组件高亮', category: 'bimcad', tags: ['BIM', '高亮'] },
+  'CAD渲染.mp4': { title: 'CAD 实时渲染', category: 'bimcad', tags: ['CAD', '实时渲染'] },
 
-  // 车载 HMI
-  'Unity泊车演示.mp4': { slug: 'unity-parking', title: 'Unity 泊车演示', category: 'auto', tags: ['Unity', '泊车'] },
-  'Unity行车演示.mp4': { slug: 'unity-driving', title: 'Unity 行车演示', category: 'auto', tags: ['Unity', '行车'] },
-  'MorrowUI/3D AVM.mp4': { slug: 'avm-3d-1', title: '3D AVM 环视 · 一', category: 'auto', tags: ['AVM', '环视'] },
-  'MorrowUI/3DAVM.mp4': { slug: 'avm-3d-2', title: '3D AVM 环视 · 二', category: 'auto', tags: ['AVM', '环视'] },
-  'MorrowUI/MorrowUI动画效果.mp4': { slug: 'morrowui-animation', title: 'MorrowUI 动效', category: 'auto', tags: ['HMI', '动效'] },
-  'MorrowUI/MorrowUI粒子效果.mp4': { slug: 'morrowui-particles', title: 'MorrowUI 粒子效果', category: 'auto', tags: ['HMI', '粒子系统'] },
-  'MorrowUI/opengl文字.mp4': { slug: 'opengl-text', title: 'OpenGL 文字渲染', category: 'auto', tags: ['OpenGL', '文字渲染'] },
-  'MorrowUI/档位动效/上下扫光.mp4': { slug: 'gear-sweep', title: '档位动效 · 上下扫光', category: 'auto', tags: ['HMI', '档位动效'] },
-  'MorrowUI/档位动效/动态圈.mp4': { slug: 'gear-ring', title: '档位动效 · 动态圈', category: 'auto', tags: ['HMI', '档位动效'] },
-  'MorrowUI/档位动效/进入.mp4': { slug: 'gear-enter', title: '档位动效 · 进入', category: 'auto', tags: ['HMI', '档位动效'] },
-  'MorrowUI/档位动效/退出.mp4': { slug: 'gear-exit', title: '档位动效 · 退出', category: 'auto', tags: ['HMI', '档位动效'] },
+  // 车载演示（非 MorrowUI 库）
+  'Unity泊车演示.mp4': { title: 'Unity 泊车演示', category: 'auto', tags: ['Unity', '泊车'] },
+  'Unity行车演示.mp4': { title: 'Unity 行车演示', category: 'auto', tags: ['Unity', '行车'] },
 
   // Web 与应用
-  'web端超轻渲染引擎.mp4': { slug: 'web-lightweight-engine', title: 'Web 端超轻量渲染引擎', category: 'web', tags: ['WebGL', '轻量化'] },
-  '爱福窝家装3D.mp4': { slug: 'home-3d', title: '家装 3D 展示', category: 'web', tags: ['家装', '3D 展示'] },
-  '爱福窝家装平面.mp4': { slug: 'home-plan', title: '家装平面设计', category: 'web', tags: ['家装', '平面图'] },
-  'ueGUI.mp4': { slug: 'ue-gui', title: 'UE 界面演示', category: 'web', tags: ['UE', '界面'] },
+  'web端超轻渲染引擎.mp4': { title: 'Web 端超轻量渲染引擎', category: 'web', tags: ['WebGL', '轻量化'] },
+  '爱福窝家装3D.mp4': { title: '家装 3D 展示', category: 'web', tags: ['家装', '3D 展示'] },
+  '爱福窝家装平面.mp4': { title: '家装平面设计', category: 'web', tags: ['家装', '平面图'] },
+  'ueGUI.mp4': { title: 'UE 界面演示', category: 'web', tags: ['UE', '界面'] },
+
+  // MorrowUI（开源仓库展示）
+  'MorrowUI/MorrowUI 3D AVM实车展示.mp4': { title: '3D AVM 实车展示', category: 'morrowui', tags: ['MorrowUI', 'AVM'] },
+  'MorrowUI/MorrowUI 3D AVM操作展示.mp4': { title: '3D AVM 操作展示', category: 'morrowui', tags: ['MorrowUI', 'AVM'] },
+  'MorrowUI/MorrowUI Controls组件效果.mp4': { title: 'Controls 组件效果', category: 'morrowui', tags: ['MorrowUI', '组件'] },
+  'MorrowUI/MorrowUI GLTF.mp4': { title: 'GLTF 加载', category: 'morrowui', tags: ['MorrowUI', 'GLTF'] },
+  'MorrowUI/MorrowUI 动画效果.mp4': { title: '动画效果', category: 'morrowui', tags: ['MorrowUI', '动效'] },
+  'MorrowUI/MorrowUI 图片组件.mp4': { title: '图片组件', category: 'morrowui', tags: ['MorrowUI', '组件'] },
+  'MorrowUI/MorrowUI 场景组件.mp4': { title: '场景组件', category: 'morrowui', tags: ['MorrowUI', '组件'] },
+  'MorrowUI/MorrowUI 文本组件.mp4': { title: '文本组件', category: 'morrowui', tags: ['MorrowUI', '组件'] },
+  'MorrowUI/MorrowUI 档位效果.mp4': { title: '档位效果', category: 'morrowui', tags: ['MorrowUI', '动效'] },
+  'MorrowUI/MorrowUI 滚动容器组件.mp4': { title: '滚动容器组件', category: 'morrowui', tags: ['MorrowUI', '组件'] },
+  'MorrowUI/MorrowUI 粒子效果.mp4': { title: '粒子效果', category: 'morrowui', tags: ['MorrowUI', '粒子系统'] },
+  'MorrowUI/MorrowUI 视频流组件.mp4': { title: '视频流组件', category: 'morrowui', tags: ['MorrowUI', '组件'] },
+  'MorrowUI/MorrowUI 进度条组件.mp4': { title: '进度条组件', category: 'morrowui', tags: ['MorrowUI', '组件'] },
 };
+
+// Top-level folder -> default category for files without an override.
+const FOLDER_CATEGORIES = {
+  MorrowUI: 'morrowui',
+};
+
+function listVideos(dir, prefix = '') {
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      out.push(...listVideos(path.join(dir, entry.name), rel));
+    } else if (/\.(mp4|webm)$/i.test(entry.name)) {
+      out.push(rel);
+    }
+  }
+  return out.sort();
+}
 
 function probe(file) {
   const out = execFileSync(FFPROBE, [
@@ -99,40 +128,74 @@ function formatDuration(seconds) {
   return `${m}:${String(s).padStart(2, '0')}`;
 }
 
-fs.mkdirSync(VIDEOS_OUT, { recursive: true });
-fs.mkdirSync(POSTERS_OUT, { recursive: true });
+// ---- main ----
+const relFiles = listVideos(VIDEOS_DIR);
+if (relFiles.length === 0) {
+  console.error('No videos found under public/videos');
+  process.exit(1);
+}
+
+// Curated entries first (keep manifest order), then auto-derived ones.
+const ordered = [
+  ...Object.keys(OVERRIDES).filter((k) => relFiles.includes(k)),
+  ...relFiles.filter((f) => !OVERRIDES[f]),
+];
 
 const entries = [];
-for (const [rel, meta] of Object.entries(MANIFEST)) {
-  const src = path.join(SOURCE_DIR, ...rel.split('/'));
-  if (!fs.existsSync(src)) {
-    console.warn(`!! missing source, skipped: ${rel}`);
-    continue;
-  }
-  const videoOut = path.join(VIDEOS_OUT, `${meta.slug}.mp4`);
-  const posterOut = path.join(POSTERS_OUT, `${meta.slug}.jpg`);
+for (const rel of ordered) {
+  const file = path.join(VIDEOS_DIR, ...rel.split('/'));
+  const info = probe(file);
 
-  const info = probe(src);
-  fs.copyFileSync(src, videoOut);
+  const override = OVERRIDES[rel] ?? {};
+  const topFolder = rel.includes('/') ? rel.split('/')[0] : null;
+  const category = override.category ?? FOLDER_CATEGORIES[topFolder] ?? 'uncategorized';
+  const title = override.title ?? rel.split('/').pop().replace(/\.(mp4|webm)$/i, '');
+  const tags = override.tags ?? [];
+
+  const posterRel = rel.replace(/\.(mp4|webm)$/i, '.jpg');
+  const posterOut = path.join(POSTERS_DIR, ...posterRel.split('/'));
+  fs.mkdirSync(path.dirname(posterOut), { recursive: true });
 
   const at = Math.min(Math.max(info.duration * 0.25, 0.3), 4);
   execFileSync(FFMPEG, [
-    '-y', '-ss', String(at), '-i', src,
+    '-y', '-ss', String(at), '-i', file,
     '-frames:v', '1', '-vf', "scale='min(960,iw)':-2", '-q:v', '4', posterOut,
   ], { stdio: 'pipe' });
 
   entries.push({
-    ...meta,
-    file: `videos/${meta.slug}.mp4`,
-    poster: `posters/${meta.slug}.jpg`,
+    title,
+    category,
+    tags,
+    file: `videos/${rel}`,
+    poster: `posters/${posterRel}`,
     quality: qualityBadge(info.height),
     duration: formatDuration(info.duration),
     width: info.width,
     height: info.height,
   });
-  console.log(`ok ${rel} -> ${meta.slug}.mp4 ${info.width}x${info.height} ${info.duration}s`);
+  console.log(`ok ${rel} -> ${info.width}x${info.height} ${info.duration}s [${category}]`);
 }
 
 fs.mkdirSync(path.dirname(DATA_OUT), { recursive: true });
 fs.writeFileSync(DATA_OUT, JSON.stringify(entries, null, 2) + '\n', 'utf8');
+
+// Prune posters that no longer match any video, and drop empty poster dirs.
+function prunePosters(dir) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      prunePosters(p);
+      if (fs.readdirSync(p).length === 0) fs.rmdirSync(p);
+    } else if (entry.name.endsWith('.jpg')) {
+      const rel = path.relative(POSTERS_DIR, p).replaceAll('\\', '/');
+      const videoRel = rel.replace(/\.jpg$/i, '.mp4');
+      if (!relFiles.includes(videoRel) && !relFiles.some((v) => v.replace(/\.webm$/i, '.mp4') === videoRel)) {
+        fs.rmSync(p);
+        console.log(`pruned stale poster ${rel}`);
+      }
+    }
+  }
+}
+if (fs.existsSync(POSTERS_DIR)) prunePosters(POSTERS_DIR);
+
 console.log(`\nWrote ${entries.length} entries to ${path.relative(ROOT, DATA_OUT)}`);

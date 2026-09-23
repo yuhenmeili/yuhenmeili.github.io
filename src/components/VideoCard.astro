@@ -9,19 +9,21 @@ interface Props {
 
 const { video, categoryLabel } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const videoSrc = encodeURI(`${base}${video.file}`);
+const posterSrc = encodeURI(`${base}${video.poster}`);
 ---
 
 <figure
   class="video-card"
   data-category={video.category}
-  data-video-src={`${base}${video.file}`}
+  data-video-src={videoSrc}
   tabindex="0"
   role="button"
   aria-label={`播放 ${video.title}`}
 >
   <div class="thumb">
-    <img src={`${base}${video.poster}`} alt={video.title} loading="lazy" />
-    <video class="preview" muted loop playsinline preload="none" data-src={`${base}${video.file}`}></video>
+    <img src={posterSrc} alt={video.title} loading="lazy" />
+    <video class="preview" muted loop playsinline preload="none" data-src={videoSrc}></video>
     <span class="play-icon">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
         <polygon points="6 3 21 12 6 21 6 3"></polygon>
