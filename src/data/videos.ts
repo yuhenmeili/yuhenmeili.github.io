@@ -27,39 +27,29 @@ export const CATEGORIES: VideoCategory[] = [
   {
     id: 'engine',
     label: 'Morrow 引擎',
-    description: '自研 Morrow 渲染引擎的整体效果（尚未开源）',
-  },
-  {
-    id: 'render',
-    label: '渲染技术',
-    description: '天空盒、阴影、TAA、后处理等实时渲染技术演示',
+    description: '自研 Vulkan 渲染引擎：地形、体积雾、粒子等整体效果（尚未开源）',
   },
   {
     id: 'morrowui',
     label: 'MorrowUI',
-    description: '开源车载 HMI 组件库的效果展示',
+    description: '开源车载 HMI 引擎的组件与效果展示',
     link: 'https://github.com/yuhenmeili/MorrowUI',
     linkLabel: 'GitHub 开源仓库',
   },
   {
-    id: 'auto',
-    label: '车载 HMI',
+    id: 'unity',
+    label: 'Unity',
     description: 'Unity 智能座舱演示',
   },
   {
-    id: 'gis',
-    label: 'GIS · 数字孪生',
-    description: '三维地理信息、倾斜摄影与数字孪生场景',
+    id: 'threejs',
+    label: 'Three.js',
+    description: '基于 Three.js 的 Web 3D 应用与渲染技术',
   },
   {
-    id: 'bimcad',
-    label: 'BIM · CAD',
-    description: '建筑信息模型与 CAD 数据的实时可视化',
-  },
-  {
-    id: 'web',
-    label: 'Web · 应用',
-    description: '浏览器端轻量化渲染与线上 3D 应用',
+    id: 'cesium',
+    label: 'Cesium',
+    description: '基于 Cesium 的 GIS 与数字孪生场景',
   },
 ];
 
