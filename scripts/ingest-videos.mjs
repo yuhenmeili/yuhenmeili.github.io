@@ -56,7 +56,7 @@ const OVERRIDES = {
   'MorrowUI/MorrowUI 视频流组件.mp4': { title: '视频流组件', tags: ['MorrowUI', '组件'] },
   'MorrowUI/MorrowUI 进度条组件.mp4': { title: '进度条组件', tags: ['MorrowUI', '组件'] },
   'MorrowUI/顶点动画.mp4': { title: '顶点动画', tags: ['MorrowUI', '顶点着色器'] },
-  'MorrowUI/高性能模糊.mp4': { title: '高性能模糊', tags: ['MorrowUI', '后处理'] },
+  'MorrowUI/液态玻璃.mp4': { title: '液态玻璃', tags: ['MorrowUI', '后处理'] },
 
   // Unity
   'Unity/Unity泊车演示.mp4': { title: '泊车演示', tags: ['Unity', '泊车'] },

@@ -308,18 +308,18 @@
     "height": 1024
   },
   {
-    "title": "高性能模糊",
+    "title": "液态玻璃",
     "category": "morrowui",
     "tags": [
       "MorrowUI",
       "后处理"
     ],
-    "file": "videos/MorrowUI/高性能模糊.mp4",
-    "poster": "posters/MorrowUI/高性能模糊.jpg",
+    "file": "videos/MorrowUI/液态玻璃.mp4",
+    "poster": "posters/MorrowUI/液态玻璃.jpg",
     "quality": "1080p",
-    "duration": "0:17",
-    "width": 1794,
-    "height": 1006
+    "duration": "0:22",
+    "width": 1920,
+    "height": 1080
   },
   {
     "title": "泊车演示",
