@@ -112,6 +112,104 @@
     "height": 1408
   },
   {
+    "title": "体积云",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "体积云"
+    ],
+    "file": "videos/Morrow/体积云.mp4",
+    "poster": "posters/Morrow/体积云.jpg",
+    "quality": "2K",
+    "duration": "0:24",
+    "width": 2208,
+    "height": 1408
+  },
+  {
+    "title": "PBR 材质",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "PBR"
+    ],
+    "file": "videos/Morrow/PBR.mp4",
+    "poster": "posters/Morrow/PBR.jpg",
+    "quality": "1080p",
+    "duration": "0:14",
+    "width": 1920,
+    "height": 1080
+  },
+  {
+    "title": "DDGI 动态全局光照",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "DDGI"
+    ],
+    "file": "videos/Morrow/DDGI.mp4",
+    "poster": "posters/Morrow/DDGI.jpg",
+    "quality": "1080p",
+    "duration": "0:21",
+    "width": 1920,
+    "height": 1080
+  },
+  {
+    "title": "虚拟几何体",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "Virtual Geometry"
+    ],
+    "file": "videos/Morrow/虚拟几何体.mp4",
+    "poster": "posters/Morrow/虚拟几何体.jpg",
+    "quality": "1080p",
+    "duration": "0:25",
+    "width": 1920,
+    "height": 1080
+  },
+  {
+    "title": "布料渲染",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "布料模拟"
+    ],
+    "file": "videos/Morrow/布料渲染.mp4",
+    "poster": "posters/Morrow/布料渲染.jpg",
+    "quality": "1080p",
+    "duration": "0:19",
+    "width": 1920,
+    "height": 1080
+  },
+  {
+    "title": "水体渲染",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "水体"
+    ],
+    "file": "videos/Morrow/水体渲染.mp4",
+    "poster": "posters/Morrow/水体渲染.jpg",
+    "quality": "1080p",
+    "duration": "0:29",
+    "width": 1920,
+    "height": 1080
+  },
+  {
+    "title": "实时阴影",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "Shadow Map"
+    ],
+    "file": "videos/Morrow/阴影.mp4",
+    "poster": "posters/Morrow/阴影.jpg",
+    "quality": "1080p",
+    "duration": "0:16",
+    "width": 1920,
+    "height": 1200
+  },
+  {
     "title": "3D AVM 实车展示",
     "category": "morrowui",
     "tags": [
@@ -558,19 +656,5 @@
     "duration": "0:09",
     "width": 2780,
     "height": 1762
-  },
-  {
-    "title": "视频纹理投影",
-    "category": "cesium",
-    "tags": [
-      "Cesium",
-      "投影"
-    ],
-    "file": "videos/Cesium/视频投影.mp4",
-    "poster": "posters/Cesium/视频投影.jpg",
-    "quality": "1080p",
-    "duration": "0:13",
-    "width": 1346,
-    "height": 1004
   }
 ]

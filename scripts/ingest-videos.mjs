@@ -40,6 +40,13 @@ const OVERRIDES = {
   'Morrow/体积雾.mp4': { title: '体积雾', tags: ['Vulkan', '体积雾'] },
   'Morrow/体积雾+体积光.mp4': { title: '体积雾 + 体积光', tags: ['Vulkan', '体积雾'] },
   'Morrow/体积雾+体积光2.mp4': { title: '体积雾 + 体积光 · 二', tags: ['Vulkan', '体积雾'] },
+  'Morrow/体积云.mp4': { title: '体积云', tags: ['Vulkan', '体积云'] },
+  'Morrow/PBR.mp4': { title: 'PBR 材质', tags: ['Vulkan', 'PBR'] },
+  'Morrow/DDGI.mp4': { title: 'DDGI 动态全局光照', tags: ['Vulkan', 'DDGI'] },
+  'Morrow/虚拟几何体.mp4': { title: '虚拟几何体', tags: ['Vulkan', 'Virtual Geometry'] },
+  'Morrow/布料渲染.mp4': { title: '布料渲染', tags: ['Vulkan', '布料模拟'] },
+  'Morrow/水体渲染.mp4': { title: '水体渲染', tags: ['Vulkan', '水体'] },
+  'Morrow/阴影.mp4': { title: '实时阴影', tags: ['Vulkan', 'Shadow Map'] },
 
   // MorrowUI（开源仓库展示）
   'MorrowUI/MorrowUI 3D AVM实车展示.mp4': { title: '3D AVM 实车展示', tags: ['MorrowUI', 'AVM'] },
