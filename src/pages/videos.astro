@@ -451,6 +451,25 @@ const base = import.meta.env.BASE_URL;
         if (e.target === modal) modal.close();
       });
     }
+
+    // Deep links (shareable): ?cat=<categoryId> applies the filter tab,
+    // ?v=<video title> additionally opens that video's modal directly.
+    const params = new URLSearchParams(window.location.search);
+    const deepCat = params.get('cat');
+    if (deepCat) {
+      const tab = Array.from(tabs).find((t) => t.dataset.filter === deepCat);
+      tab?.click();
+    }
+    const deepVideo = params.get('v');
+    if (deepVideo) {
+      const card = Array.from(grid.querySelectorAll<HTMLElement>('.video-card')).find(
+        (c) => c.dataset.title === deepVideo,
+      );
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.click();
+      }
+    }
   }
 
   document.addEventListener('astro:page-load', initVideosPage);

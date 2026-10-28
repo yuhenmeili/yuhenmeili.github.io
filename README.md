@@ -4,7 +4,7 @@
 
 ## 结构
 
-- `src/pages/videos.astro` — 视频展示页：分类标签筛选 + 视频卡片网格（悬停静音预览、点击弹窗播放、大文件加载进度条）
+- `src/pages/videos.astro` — 视频展示页：分类标签筛选 + 视频卡片网格（悬停静音预览、点击弹窗播放、大文件加载进度条）；支持深链接 `?cat=<分类id>` 直接过滤分类、`?v=<视频标题>` 直接打开某个视频（如 `https://yuhenmeili.github.io/videos/?cat=morrowui`，供 MorrowUI 仓库 README 引用）
 - `src/data/videos.json` — 视频清单（由脚本生成：路径、标题、分类、标签、分辨率、时长）
 - `src/data/videos.ts` — 分类定义（含 MorrowUI 开源仓库链接）与类型
 - `public/videos/` `public/posters/` — 视频与封面，**目录结构与 workcase 完全一致**（本目录由 git 管理）
