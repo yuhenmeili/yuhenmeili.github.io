@@ -9,7 +9,7 @@
     "file": "videos/Morrow/竹林漫步.mp4",
     "poster": "posters/Morrow/竹林漫步.jpg",
     "quality": "2K",
-    "duration": "0:56",
+    "duration": "0:19",
     "width": 2208,
     "height": 1408
   },
@@ -150,6 +150,34 @@
     "poster": "posters/Morrow/DDGI.jpg",
     "quality": "1080p",
     "duration": "0:21",
+    "width": 1920,
+    "height": 1080
+  },
+  {
+    "title": "DDGI + 虚拟几何体",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "DDGI"
+    ],
+    "file": "videos/Morrow/DDGI+虚拟几何体.mp4",
+    "poster": "posters/Morrow/DDGI+虚拟几何体.jpg",
+    "quality": "1080p",
+    "duration": "0:39",
+    "width": 1920,
+    "height": 1080
+  },
+  {
+    "title": "多光源 + 多动画",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "光源"
+    ],
+    "file": "videos/Morrow/多光源+多动画.mp4",
+    "poster": "posters/Morrow/多光源+多动画.jpg",
+    "quality": "1080p",
+    "duration": "0:15",
     "width": 1920,
     "height": 1080
   },

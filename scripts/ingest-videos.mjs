@@ -43,6 +43,8 @@ const OVERRIDES = {
   'Morrow/体积云.mp4': { title: '体积云', tags: ['Vulkan', '体积云'] },
   'Morrow/PBR.mp4': { title: 'PBR 材质', tags: ['Vulkan', 'PBR'] },
   'Morrow/DDGI.mp4': { title: 'DDGI 动态全局光照', tags: ['Vulkan', 'DDGI'] },
+  'Morrow/DDGI+虚拟几何体.mp4': { title: 'DDGI + 虚拟几何体', tags: ['Vulkan', 'DDGI'] },
+  'Morrow/多光源+多动画.mp4': { title: '多光源 + 多动画', tags: ['Vulkan', '光源'] },
   'Morrow/虚拟几何体.mp4': { title: '虚拟几何体', tags: ['Vulkan', 'Virtual Geometry'] },
   'Morrow/布料渲染.mp4': { title: '布料渲染', tags: ['Vulkan', '布料模拟'] },
   'Morrow/水体渲染.mp4': { title: '水体渲染', tags: ['Vulkan', '水体'] },
