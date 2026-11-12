@@ -28,6 +28,20 @@
     "height": 1408
   },
   {
+    "title": "太阳系 Demo",
+    "category": "engine",
+    "tags": [
+      "Vulkan",
+      "太阳系"
+    ],
+    "file": "videos/Morrow/SolarSystem.mp4",
+    "poster": "posters/Morrow/SolarSystem.jpg",
+    "quality": "2K",
+    "duration": "0:24",
+    "width": 2048,
+    "height": 1440
+  },
+  {
     "title": "Heightmap 地形",
     "category": "engine",
     "tags": [

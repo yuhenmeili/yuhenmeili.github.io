@@ -34,6 +34,7 @@ const OVERRIDES = {
   // Morrow 引擎（自研，未开源）
   'Morrow/竹林漫步.mp4': { title: '竹林漫步', tags: ['Vulkan', '场景漫游'] },
   'Morrow/粒子效果.mp4': { title: '粒子效果', tags: ['Vulkan', '粒子系统'] },
+  'Morrow/SolarSystem.mp4': { title: '太阳系 Demo', tags: ['Vulkan', '太阳系'] },
   'Morrow/Heightmap地形.mp4': { title: 'Heightmap 地形', tags: ['Vulkan', '地形'] },
   'Morrow/Raymarching + FBM地形.mp4': { title: 'Raymarching + FBM 地形', tags: ['Vulkan', 'Raymarching'] },
   'Morrow/Raymarching + FBM地形2.mp4': { title: 'Raymarching + FBM 地形 · 二', tags: ['Vulkan', 'Raymarching'] },
