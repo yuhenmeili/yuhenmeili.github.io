@@ -47,6 +47,7 @@ const OVERRIDES = {
   'Morrow/DDGI+虚拟几何体.mp4': { title: 'DDGI + 虚拟几何体', tags: ['Vulkan', 'DDGI'] },
   'Morrow/多光源+多动画.mp4': { title: '多光源 + 多动画', tags: ['Vulkan', '光源'] },
   'Morrow/虚拟几何体.mp4': { title: '虚拟几何体', tags: ['Vulkan', 'Virtual Geometry'] },
+  'Morrow/间接绘制.mp4': { title: '间接绘制', tags: ['Vulkan', 'GPU Driven'] },
   'Morrow/布料渲染.mp4': { title: '布料渲染', tags: ['Vulkan', '布料模拟'] },
   'Morrow/水体渲染.mp4': { title: '水体渲染', tags: ['Vulkan', '水体'] },
   'Morrow/阴影.mp4': { title: '实时阴影', tags: ['Vulkan', 'Shadow Map'] },
